@@ -1,0 +1,6 @@
+pip install djangorestframework
+pip install djongo
+pip install setuptools
+# pip install redis
+# pip install celery
+ 
