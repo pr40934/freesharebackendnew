@@ -1,6 +1,9 @@
-pip install djangorestframework
-pip install djongo
-pip install setuptools
-# pip install redis
-# pip install celery
- 
+djangorestframework
+django
+setuptools
+django-cors-headers
+PyJWT
+python-dotenv
+psycopg2-binary
+boto3
+python-decouple
