@@ -59,8 +59,17 @@ MIDDLEWARE = [
 MIDDLEWARE.insert(0, "backend_free_share.db_health.DBHealthMiddleware")
 
 CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_CREDENTIALS = True
+
+# CSRF decides if Django will trust and process it after receiving.
 CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://localhost:3000"]
+
+# CORS decides if the browser can send the request.
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Dev
+    "http://localhost:3000",  # Dev
+    ]
 
 ROOT_URLCONF = 'backend_free_share.urls'
 
@@ -237,10 +246,7 @@ EMAIL_HOST_USER = "pr4093403@gmail.com"
 EMAIL_HOST_PASSWORD = "your-app-password"
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Dev
-    "https://yourdomain.com",  # Prod
-]
+
 
 
 

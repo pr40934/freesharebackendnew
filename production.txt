@@ -1,0 +1,21 @@
+production run
+
+=================================
+pip install uvicorn
+
+uvicorn backend_free_share.asgi:application --host 0.0.0.0 --port 8000
+
+=================================
+contionus runing the app after close the server
+
+nohup uvicorn backend_free_share.asgi:application --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+
+=================================
+kill
+
+pkill -f uvicorn
+
+=================================
+get list of runing ports
+ps -aux
+
