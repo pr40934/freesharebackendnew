@@ -66,10 +66,9 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://localhost:3000"]
 
 # CORS decides if the browser can send the request.
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Dev
-    "http://localhost:3000",  # Dev
-    ]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173", "http://localhost:3000"]
+
+ALLOWED_HOSTS = ["34.93.213.137", "localhost"]
 
 ROOT_URLCONF = 'backend_free_share.urls'
 
