@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 
 # from celery import shared_task
 from decouple import config
-from keys import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, BUCKET_NAME 
+# from keys import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, BUCKET_NAME 
 from .task import process_video_delete_queue
 
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_500_INTERNAL_SERVER_ERROR
