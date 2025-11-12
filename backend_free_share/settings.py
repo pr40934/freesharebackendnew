@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-from pathlib import Path
-
+from pathlib import Path 
+from decouple import config
+# from keys import SUPABASE_URL, SUPABASE_ANON_KEY
+ 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,16 +22,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nfwrue^0udu5&firzfmf@^g3v4e=f7q*knzrx-3&is^k35ks(y'
+SECRET_KEY = config("DJANGO_SECRET_KEY")
+DEBUG = config("DEBUG", default=False, cast=bool)
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 INSTALLED_APPS = [
+    'rest_framework.authtoken',
     'rest_framework',
     'api',
     'django.contrib.admin',
@@ -54,6 +59,8 @@ MIDDLEWARE = [
 MIDDLEWARE.insert(0, "backend_free_share.db_health.DBHealthMiddleware")
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://localhost:3000"]
 
 ROOT_URLCONF = 'backend_free_share.urls'
 
@@ -78,15 +85,8 @@ WSGI_APPLICATION = 'backend_free_share.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
-# SupaBase@#$@#$23232Prat
-SUPABASE_PASSWORD = 'SupaBase@#$@#$23232Prat'
+
 # postgresql://postgres:[SUPABASE_PASSWORD]@db.jxpkukugslcgttigovpl.supabase.co:5432/postgres
 # postgresql://postgres:[SUPABASE_PASSWORD]@db.jxpkukugslcgttigovpl.supabase.co:5432/postgres
 
@@ -95,18 +95,58 @@ DATABASES = {
     "ENGINE": "django.db.backends.postgresql",
     "NAME": 'postgres', # project name
     "USER": 'postgres',
-    "PASSWORD": SUPABASE_PASSWORD,
     "HOST": "db.jxpkukugslcgttigovpl.supabase.co",
+    "PASSWORD": config("SUPABASE_PASSWORD"),
+    # "PASSWORD": SUPABASE_PASSWORD,
     "PORT": "5432",
     # "CONN_MAX_AGE" : 60,
     "OPTIONS": {"sslmode": "require"},
   }
-}
+} 
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": 'postgres',
+#         "USER": 'postgres',  # Format: postgres.{project-ref}
+#         "PASSWORD": SUPABASE_PASSWORD, 
+#         "HOST": "db.jxpkukugslcgttigovpl.supabase.co",  # Pooler endpoint
+#         "PORT": "5432",  # Pooler uses port 6543, not 5432
+#         # "OPTIONS": {
+#         #     "sslmode": "require",
+#         # }, 
+#         "OPTIONS": {"sslmode": "require"}, 
+#     } 
+# } 
 
 
+# import socket
 
-USE_TZ = True
-TIME_ZONE = 'Asia/Kolkata'   # or your correct local timezone
+# # Force IPv4 connection (add this before DATABASES)
+# if not hasattr(socket, 'orig_getaddrinfo'):
+#     socket.orig_getaddrinfo = socket.getaddrinfo
+#     socket.getaddrinfo = lambda host, port, family=0, *args, **kwargs: \
+#         socket.orig_getaddrinfo(host, port, socket.AF_INET, *args, **kwargs)
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": 'postgres',
+#         "USER": 'postgres',
+#         "PASSWORD": config("SUPABASE_PASSWORD"),
+#         "HOST": "db.jxpkukugslcgttigovpl.supabase.co",
+#         "PORT": "5432",
+#         "OPTIONS": {
+#             "sslmode": "require",
+#             "connect_timeout": 10,
+#         }, 
+#         "CONN_MAX_AGE": 0,
+#     }
+# }
+
+
+# USE_TZ = True
+# TIME_ZONE = 'Asia/Kolkata'   # or your correct local timezone
 
 
 # DATABASES = {
@@ -142,30 +182,47 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+# USE_TZ = True
+
+
+# Static / Timezone
 USE_TZ = True
+TIME_ZONE = "Asia/Kolkata"
+STATIC_URL = "static/"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     'PAGE_SIZE': 10,  # Customize the page size
+# }
+
+# REST Framework
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,  # Customize the page size
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
 
 APPEND_SLASH = False
 
@@ -178,3 +235,48 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "pr4093403@gmail.com"
 EMAIL_HOST_PASSWORD = "your-app-password"
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Dev
+    "https://yourdomain.com",  # Prod
+]
+
+
+
+
+# # Session Security
+# SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_HTTPONLY = True
+# SESSION_COOKIE_SAMESITE = 'Lax'
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# SESSION_COOKIE_AGE = 86400 * 7  # 7 days
+
+
+# # CSRF
+# CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_SAMESITE = 'Lax'
+
+# SUPABASE_URL = SUPABASE_URL
+# SUPABASE_KEY = SUPABASE_ANON_KEY
+
+SUPABASE_KEY = config("SUPABASE_ANON_KEY")
+# SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp4cGt1a3Vnc2xjZ3R0aWdvdnBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyOTM0NDIsImV4cCI6MjA3Njg2OTQ0Mn0.S0W3SSXqMbHF0loIeYwifUQKbl-bgXtp_dapk2FM67g'
+SUPABASE_JWT_SECRET = config("SUPABASE_JWT_SECRET")
+
+
+# Session & CSRF Security
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = "Lax"
+
+
+# AWS S3
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_REGION = config("AWS_REGION")
+BUCKET_NAME = config("BUCKET_NAME")
