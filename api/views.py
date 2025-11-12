@@ -11,6 +11,7 @@ from rest_framework import status
 from datetime import datetime, timedelta
 
 # from celery import shared_task
+from decouple import config
 from keys import AWS_ACCESS_KEY, AWS_SECRET_KEY, AWS_REGION, BUCKET_NAME 
 from .task import process_video_delete_queue
 
@@ -38,9 +39,9 @@ DECRYPTION_KEY = 987654321  # Example key for XOR decryption
 def get_s3():
     return boto3.client(
         "s3",
-        aws_access_key_id=AWS_ACCESS_KEY,
-        aws_secret_access_key=AWS_SECRET_KEY,
-        region_name=AWS_REGION,
+        aws_access_key_id=config("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=config("AWS_SECRET_ACCESS_KEY"),
+        region_name=config("AWS_REGION"),
     )
 
 
@@ -75,7 +76,7 @@ class GetPresignedUrlsView(APIView):
                     DeleteQueue.objects.create(media_id=old, s3_key=old.thumbnail, media_type='THUMBNAIL')
 
             upload = s3.create_multipart_upload(
-                Bucket=BUCKET_NAME,
+                Bucket=config("BUCKET_NAME"),
                 Key=s3_key,
                 ContentType=filetype
             )
@@ -90,7 +91,7 @@ class GetPresignedUrlsView(APIView):
                     "url": s3.generate_presigned_url(
                         "upload_part",
                         Params={
-                            "Bucket": BUCKET_NAME,
+                            "Bucket": config("BUCKET_NAME"),
                             "Key": s3_key,
                             "UploadId": upload_id,
                             "PartNumber": i
@@ -133,7 +134,7 @@ class CompleteMultipartUploadView(APIView):
             s3 = get_s3()
 
             s3.complete_multipart_upload(
-                Bucket=BUCKET_NAME,
+                Bucket=config("BUCKET_NAME"),
                 Key=video.s3_key,
                 UploadId=upload_id,
                 MultipartUpload={"Parts": parts}
@@ -163,7 +164,7 @@ class PresignedThumbNailUploadView(APIView):
 
         url = s3.generate_presigned_url(
             "put_object",
-            Params={"Bucket": BUCKET_NAME, "Key": key, "ContentType": file_type},
+            Params={"Bucket": config("BUCKET_NAME"), "Key": key, "ContentType": file_type},
             ExpiresIn=3600,
         )
         video.thumbnail = key

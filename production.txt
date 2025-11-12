@@ -16,6 +16,10 @@ kill
 pkill -f uvicorn
 
 =================================
-get list of runing ports
-ps -aux
+
+kill port 
+
+sudo apt install lsof -y
+
+sudo lsof -t -i:8000 | xargs sudo kill -9
 
