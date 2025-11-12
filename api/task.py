@@ -1,7 +1,8 @@
 import logging
 # from celery import shared_task
 from .models import DeleteQueue, Video
-from keys import BUCKET_NAME
+# from keys import BUCKET_NAME
+from decouple import config
 logger = logging.getLogger(__name__)
 
 # @shared_task
@@ -116,7 +117,7 @@ def process_video_delete_queue(batch_size=50):
         for item in pending:
             try:
                 # Call AWS API to delete the file (video or other media)
-                resp = s3.delete_object(Bucket=BUCKET_NAME, Key=item.s3_key)
+                resp = s3.delete_object(Bucket=config("BUCKET_NAME"), Key=item.s3_key)
                 item.status = 'SUCCESS'
                 item.save()
 
