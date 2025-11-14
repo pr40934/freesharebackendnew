@@ -297,6 +297,28 @@ class GetUserVideosView(APIView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
+class Test(APIView):
+
+    def get(self, request):
+        try:
+
+            return Response(
+                {
+                    "status": "success",
+                    "message": "Test API is working fine"
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except Exception as e:
+                logger.error(f"❌ Error fetching videos: {str(e)}")
+                return Response(
+                    {"error": str(e)},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+
+@method_decorator(csrf_exempt, name='dispatch')
 class GetVideoDetailsView(APIView):
 
     authentication_classes = []  # Disable authentication

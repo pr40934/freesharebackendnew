@@ -16,7 +16,8 @@ from .views import (
     VideoDataSaveView,
     GetUserVideosView,
     GetVideoDetailsView,
-    VideoViewCreateAPIView
+    VideoViewCreateAPIView,
+    Test
 )
 
 urlpatterns = [
@@ -36,4 +37,5 @@ urlpatterns = [
     path('user-videos/', GetUserVideosView.as_view(), name='get_user_videos'),
     path('video-details/', GetVideoDetailsView.as_view(), name='video_details'),
     path('view/', VideoViewCreateAPIView.as_view(), name='view'),
+    path('test/', Test.as_view(), name='view'),
 ]

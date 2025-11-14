@@ -1,3 +1,15 @@
+=================================================================
+After pulling the new code in to the linux box 
+
+pkill -f uvicorn
+
+nohup uvicorn backend_free_share.asgi:application --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+
+=================================================================
+
+
+
+
 Here’s the **full production setup in ONE CLEAN FILE** — includes:
 
 ✅ **Uvicorn production run**
