@@ -59,16 +59,36 @@ MIDDLEWARE = [
 MIDDLEWARE.insert(0, "backend_free_share.db_health.DBHealthMiddleware")
 
 CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF decides if Django will trust and process it after receiving.
-CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://localhost:3000","https://freeshare-two.vercel.app"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://freeshare-two.vercel.app",
+    "https://freeshare.world",
+    "https://www.freeshare.world",
+    "https://api.freeshare.world",
+]
 
-# CORS decides if the browser can send the request.
-CORS_ALLOWED_ORIGINS = ["http://localhost:5173", "http://localhost:3000", "https://freeshare-two.vercel.app"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://freeshare-two.vercel.app",
+    "https://freeshare.world",
+    "https://www.freeshare.world",
+    "https://api.freeshare.world",
+]
 
-ALLOWED_HOSTS = ["34.93.213.137", "localhost", "freeshare-two.vercel.app"]
+ALLOWED_HOSTS = [
+    "34.93.213.137",
+    "localhost",
+    "127.0.0.1",
+    "freeshare-two.vercel.app",
+    "freeshare.world",
+    "www.freeshare.world",
+    "api.freeshare.world",
+]
+
 
 ROOT_URLCONF = 'backend_free_share.urls'
 

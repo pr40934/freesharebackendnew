@@ -1,25 +1,176 @@
-production run
+Here’s the **full production setup in ONE CLEAN FILE** — includes:
 
-=================================
+✅ **Uvicorn production run**
+✅ **Kill commands**
+✅ **Nginx setup**
+✅ **GoDaddy DNS setup**
+✅ **Perfect for api.freeshare.world**
+
+**Short, clean, production ready.**
+
+---
+
+# 🟦 **FULL PRODUCTION SETUP — API (api.freeshare.world)**
+
+### **Use this as your master checklist.**
+
+---
+
+# 🚀 **1. Run Backend in Production**
+
+## Install Uvicorn
+
+```
 pip install uvicorn
+```
 
+## Run normally
+
+```
 uvicorn backend_free_share.asgi:application --host 0.0.0.0 --port 8000
+```
 
-=================================
-contionus runing the app after close the server
+## Run continuously (after SSH logout)
 
+```
 nohup uvicorn backend_free_share.asgi:application --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+```
 
-=================================
-kill
+---
 
+# 🚫 **2. Kill Server Commands**
+
+## Kill Uvicorn
+
+```
 pkill -f uvicorn
+```
 
-=================================
+## Kill port 8000
 
-kill port 
-
+```
 sudo apt install lsof -y
-
 sudo lsof -t -i:8000 | xargs sudo kill -9
+```
 
+---
+
+# 🌐 **3. GoDaddy DNS Setup (IMPORTANT)**
+
+### Open your domain → **DNS Management**
+
+Add these **A Records**:
+
+| Type | Name | Value         | TTL    |
+| ---- | ---- | ------------- | ------ |
+| A    | api  | 34.93.213.137 | 1 Hour |
+
+Delete any old **CNAME www**, or leave it if your main site uses Vercel.
+
+**Final DNS Example:**
+
+```
+A     @     34.93.213.137
+A     api   34.93.213.137
+```
+
+That’s it for DNS.
+
+---
+
+# 🟩 **4. Install Nginx on GCP VM**
+
+```
+sudo apt update
+sudo apt install -y nginx
+```
+
+---
+
+# 🟧 **5. Create Nginx Config for API Subdomain**
+
+### Open config:
+
+```
+sudo nano /etc/nginx/sites-available/api.freeshare.world
+```
+
+### Paste this:
+
+```
+server {
+    listen 80;
+    server_name api.freeshare.world;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+### Save & Exit
+
+CTRL + O 
+→ press Enter
+CTRL + X
+
+---
+
+# 🟦 **6. Enable the Nginx config**
+
+```
+sudo ln -s /etc/nginx/sites-available/api.freeshare.world /etc/nginx/sites-enabled/
+```
+
+---
+
+# 🟨 **7. Test & Reload Nginx**
+
+```
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+---
+
+# 🟩 **8. Test Your API**
+
+Visit:
+
+```
+http://api.freeshare.world/
+```
+
+If your Django allowed hosts are correct, it will work.
+
+---
+
+# 🟪 **9. Django Settings Update**
+
+In **settings.py**:
+
+```
+ALLOWED_HOSTS = [
+    "freeshare.world",
+    "www.freeshare.world",
+    "api.freeshare.world",
+    "34.93.213.137",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://freeshare.world",
+    "https://www.freeshare.world",
+    "https://api.freeshare.world",
+]
+```
+
+---
+
+# 🎉 **ALL DONE BRO. This whole file is your production setup.**
+
+If you want **FREE SSL (HTTPS)** for api.freeshare.world →
+Tell me → I’ll add it in this same format (short, clean).
