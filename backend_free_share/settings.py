@@ -66,17 +66,19 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "https://freeshare-two.vercel.app",
     "https://freeshare.world",
-    "https://www.freeshare.world",
     "https://api.freeshare.world",
+    "https://www.freeshare.world",
+    "https://creator.freeshare.world",
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
     "https://freeshare-two.vercel.app",
+    "https://api.freeshare.world",
     "https://freeshare.world",
     "https://www.freeshare.world",
-    "https://api.freeshare.world",
+    "https://creator.freeshare.world",
 ]
 
 ALLOWED_HOSTS = [
@@ -84,9 +86,10 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "freeshare-two.vercel.app",
+    "api.freeshare.world",
     "freeshare.world",
     "www.freeshare.world",
-    "api.freeshare.world",
+    "creator.freeshare.world",
 ]
 
 
